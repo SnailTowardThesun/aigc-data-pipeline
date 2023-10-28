@@ -1,0 +1,8 @@
+include:
+    - hadoop-compose.yaml
+    - kafka-compose.yaml
+    - es-kibana-compose.yaml
+    - spark-compose.yaml
+    - clickhouse-compose.yaml
+    - zookeeper-compose.yaml
+    - redis-compose.yaml
