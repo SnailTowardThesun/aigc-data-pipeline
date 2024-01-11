@@ -9,3 +9,23 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: aigc
       MONGO_INITDB_ROOT_PASSWORD: aigc-123
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: aigc-123
+      MYSQL_DATABASE: aigc
+      MYSQL_USER: aigc
+      MYSQL_PASSWORD: aigc-123
+    command: --default-authentication-plugin=mysql_native_password
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379

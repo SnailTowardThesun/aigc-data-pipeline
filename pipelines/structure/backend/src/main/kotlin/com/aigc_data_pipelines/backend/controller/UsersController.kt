@@ -1,6 +1,10 @@
 package com.aigc_data_pipelines.backend.controller
 
+import com.aigc_data_pipelines.backend.dao.UserEntity
 import com.aigc_data_pipelines.backend.dao.UserRepo
+import com.aigc_data_pipelines.backend.dao.UserRepoCustomImpl
+import com.aigc_data_pipelines.backend.dao.UserService
+import kotlinx.serialization.Serializable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -8,24 +12,55 @@ import org.springframework.web.bind.annotation.RestController
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 import org.springframework.data.domain.PageRequest
+import org.springframework.stereotype.Component
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
+@Serializable
+data class UserResponse(
+    val uid: String,
+    val username: String,
+    val nickname: String,
+    val email: String,
+    val createdAt: String,
+    val updatedAt: String,
+)
+@Component
+class UserMapper {
+    fun asResponse(entity: UserEntity):UserResponse {
+        return UserResponse(
+            uid = entity.id,
+            username = entity.username,
+            nickname = entity.nickname,
+            email = entity.email,
+            createdAt = entity.createdAt,
+            updatedAt = entity.updatedAt,
+        )
+    }
+}
 @RestController
-class UsersController(@Autowired val repo: UserRepo) {
-    @GetMapping("apis/v1/users")
+@RequestMapping("apis/v1")
+class UsersController(@Autowired val svrs: UserService, val mp: UserMapper) {
+    @GetMapping("/users")
     fun getUsers(@RequestParam pageNumber: Int = 0, @RequestParam pageSize: Int = 10): String {
-        val users = repo.findAll(PageRequest.of(pageNumber, pageSize))
+        val users = svrs.findAll(pageNumber, pageSize)
         return Json.encodeToString(users.toList())
     }
 
-    @GetMapping("apis/v1/user")
+    @GetMapping("/user")
     fun getUserById(@RequestParam uid: String): String {
-        val u = repo.findByUid(uid)
-        return Json.encodeToString(u)
+        val exists = svrs.isUserExisted(uid)
+        if (exists == 0) {
+            return "user not found"
+        }
+
+        val u = svrs.findById(uid) ?: return "user not found"
+
+        return Json.encodeToString(mp.asResponse(u))
     }
 
-    @PostMapping("apis/v1/user")
+    @PostMapping("/user")
     fun createUser(): String {
         return "createUser"
     }
-}n
+}
