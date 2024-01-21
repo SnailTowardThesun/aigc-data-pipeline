@@ -1,9 +1,7 @@
 package com.aigc_data_pipelines.backend
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication(scanBasePackages = ["com.aigc_data_pipelines.backend.controller", "com.aigc_data_pipelines.backend.dao", "com.aigc_data_pipelines.backend.tools"])
 class BackendApplication

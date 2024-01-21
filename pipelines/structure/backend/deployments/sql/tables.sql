@@ -13,6 +13,7 @@ create table tb_users (
 drop table if exists tb_datasets;
 create table tb_datasets (
     id varchar(64) not null,
+    user_id varchar(64) not null,
     name varchar(255) not null,
     description varchar(1024) not null,
     structure blob not null,

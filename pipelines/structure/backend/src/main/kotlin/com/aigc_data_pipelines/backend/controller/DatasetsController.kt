@@ -4,6 +4,7 @@ package com.aigc_data_pipelines.backend.controller
 
 import com.aigc_data_pipelines.backend.dao.DataSetsEntity
 import com.aigc_data_pipelines.backend.dao.DataSetsMySqlRepository
+import com.aigc_data_pipelines.backend.dao.DatasetService
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -37,24 +38,19 @@ data class ListDatasetsResponse(
 
 
 @RestController
-class DatasetsController(@Autowired val repo: DataSetsMySqlRepository) {
+class DatasetsController(@Autowired val repo: DatasetService) {
     @CrossOrigin(origins = ["*"])
     @GetMapping("apis/v1/datasets", produces = ["application/json"])
-    fun getDatasets(@RequestParam(required = false, defaultValue = "0") pageNumber: String,
-                    @RequestParam(required = false, defaultValue = "10") pageSize: String): String {
+    fun getDatasets(@RequestParam(required = false, defaultValue = "0") pageNumber: Int,
+                    @RequestParam(required = false, defaultValue = "10") pageSize: Int): String {
 
-        val pageAble = PageRequest.of(pageNumber.toInt(),
-            pageSize.toInt(),
-            Sort.by(Sort.Direction.DESC, "updatedAt"))
-
-        val datasets = repo.findAll(pageAble)
-
+        val datasets = repo.findAll(pageNumber, pageSize)
 
         val ret = ListDatasetsResponse(
             code = 0,
             message = "success",
             data = ListDatasetsResponseData(
-                total = datasets.totalPages,
+                total = datasets.count(),
                 datasets = datasets.toList()
             )
         )

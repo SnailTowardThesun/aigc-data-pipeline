@@ -31,6 +31,9 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+
+	// for swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 }
 
 tasks.withType<KotlinCompile> {

@@ -1,8 +1,6 @@
 package com.aigc_data_pipelines.backend.controller
 
 import com.aigc_data_pipelines.backend.dao.UserEntity
-import com.aigc_data_pipelines.backend.dao.UserRepo
-import com.aigc_data_pipelines.backend.dao.UserRepoCustomImpl
 import com.aigc_data_pipelines.backend.dao.UserService
 import kotlinx.serialization.Serializable
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -42,7 +39,8 @@ class UserMapper {
 @RequestMapping("apis/v1")
 class UsersController(@Autowired val svrs: UserService, val mp: UserMapper) {
     @GetMapping("/users")
-    fun getUsers(@RequestParam pageNumber: Int = 0, @RequestParam pageSize: Int = 10): String {
+    fun getUsers(@RequestParam(required = false, defaultValue = "0") pageNumber: Int,
+                 @RequestParam(required = false, defaultValue = "10") pageSize: Int): String {
         val users = svrs.findAll(pageNumber, pageSize)
         return Json.encodeToString(users.toList())
     }

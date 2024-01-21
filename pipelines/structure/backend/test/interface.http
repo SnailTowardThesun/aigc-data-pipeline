@@ -2,7 +2,7 @@
 GET http://localhost:8098/apis/v1/user?uid=d440383a2eb34673b5f8662dd497816c
 
 ############ list users
-GET http://localhost:8098/apis/v1/users?pageSize=10&pageNumber=0
+GET http://localhost:8098/apis/v1/users?pageSize=10
 
 ############ list datasets
 GET http://localhost:8098/apis/v1/datasets?pageNumber=0&pageSize=10
